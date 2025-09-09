@@ -3,6 +3,8 @@ import type React from "react";
 import { jwtDecode } from "jwt-decode";
 import { createContext, useContext, useState, useEffect } from "react";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
+
 interface User {
   id: string;
   username: string;
@@ -65,7 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      const response = await fetch("http://localhost:9000/api/v1/user/login", {
+      const response = await fetch(`${API_URL}/user/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -106,16 +108,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     password: string
   ): Promise<boolean> => {
     try {
-      const response = await fetch(
-        "http://localhost:9000/api/v1/user/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username, email, password }),
-        }
-      );
+      const response = await fetch(`${API_URL}/user/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, email, password }),
+      });
 
       const data = await response.json();
 

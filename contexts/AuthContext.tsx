@@ -108,7 +108,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     password: string
   ): Promise<boolean> => {
     try {
-      const response = await fetch(`${API_URL}/user/login`, {
+      const response = await fetch(`${API_URL}/user/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

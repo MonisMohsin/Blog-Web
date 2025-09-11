@@ -1,6 +1,6 @@
-"use client"
-import type React from "react"
-import { useState, useEffect } from "react"
+"use client";
+import type React from "react";
+import { useState, useEffect } from "react";
 import {
   Container,
   Grid,
@@ -18,26 +18,31 @@ import {
   IconButton,
   Menu,
   MenuItem,
-} from "@mui/material"
-import { Add as AddIcon, AccountCircle, Logout, Category as CategoryIcon } from "@mui/icons-material"
-import { useAuth } from "@/contexts/AuthContext"
-import { apiRequest } from "@/lib/api"
-import ProtectedRoute from "@/components/ProtectedRoute"
-import { useRouter } from "next/navigation"
+} from "@mui/material";
+import {
+  Add as AddIcon,
+  AccountCircle,
+  Logout,
+  Category as CategoryIcon,
+} from "@mui/icons-material";
+import { useAuth } from "@/contexts/AuthContext";
+import { apiRequest } from "@/lib/api";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import { useRouter } from "next/navigation";
 
 interface Blog {
-  _id: string
-  title: string
-  description: string
-  thumbnail: string
+  _id: string;
+  title: string;
+  description: string;
+  thumbnail: string;
   category: {
-    _id: string
-    title: string
-  }
+    _id: string;
+    title: string;
+  };
   user: {
-    _id: string
-    username: string
-  }
+    _id: string;
+    username: string;
+  };
 }
 
 export default function DashboardPage() {
@@ -45,50 +50,50 @@ export default function DashboardPage() {
     <ProtectedRoute>
       <DashboardContent />
     </ProtectedRoute>
-  )
+  );
 }
 
 function DashboardContent() {
-  const [blogs, setBlogs] = useState<Blog[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState("")
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const { user, logout, token } = useAuth()
-  const router = useRouter()
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { user, logout, token } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
-    fetchBlogs()
-  }, [])
+    fetchBlogs();
+  }, []);
 
   const fetchBlogs = async () => {
     try {
-      setLoading(true)
-      const data = await apiRequest("/get/allblog", {}, token!)
-      setBlogs(data.blogs || [])
+      setLoading(true);
+      const data = await apiRequest("/get/allblog", {}, token!);
+      setBlogs(data.blogs || []);
     } catch (err) {
-      setError("Failed to fetch blogs")
-      console.error("Error fetching blogs:", err)
+      setError("Failed to fetch blogs");
+      console.error("Error fetching blogs:", err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleMenuClose = () => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
 
   const handleLogout = () => {
-    logout()
-    router.push("/login")
-  }
+    logout();
+    router.push("/login");
+  };
 
   const handleViewBlog = (blogId: string) => {
-    router.push(`/blog/${blogId}`)
-  }
+    router.push(`/blog/${blogId}`);
+  };
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -108,7 +113,12 @@ function DashboardContent() {
             Categories
           </Button>
 
-          <Button color="inherit" startIcon={<AddIcon />} onClick={() => router.push("/blog/create")} sx={{ mr: 2 }}>
+          <Button
+            color="inherit"
+            startIcon={<AddIcon />}
+            onClick={() => router.push("/blog/create")}
+            sx={{ mr: 2 }}
+          >
             New Blog
           </Button>
 
@@ -139,7 +149,9 @@ function DashboardContent() {
             onClose={handleMenuClose}
           >
             <MenuItem onClick={handleMenuClose}>
-              <Typography textAlign="center">Hello, {user?.username}</Typography>
+              <Typography textAlign="center">
+                Hello, {user?.username}
+              </Typography>
             </MenuItem>
             <MenuItem onClick={handleLogout}>
               <Logout fontSize="small" sx={{ mr: 1 }} />
@@ -173,7 +185,11 @@ function DashboardContent() {
             <Typography variant="body2" color="text.secondary" mb={3}>
               Create your first blog post to get started
             </Typography>
-            <Button variant="contained" startIcon={<AddIcon />} onClick={() => router.push("/blog/create")}>
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => router.push("/blog/create")}
+            >
               Create Blog
             </Button>
           </Box>
@@ -199,7 +215,7 @@ function DashboardContent() {
                     <CardMedia
                       component="img"
                       height="200"
-                      image={`http://localhost:8000/${blog.thumbnail}`}
+                      image={`http://localhost:9000/upload/${blog.thumbnail}`}
                       alt={blog.title}
                       sx={{ objectFit: "cover" }}
                     />
@@ -223,9 +239,18 @@ function DashboardContent() {
                       {blog.description}
                     </Typography>
 
-                    <Box display="flex" justifyContent="space-between" alignItems="center">
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
                       {blog.category && (
-                        <Chip label={blog.category.title} size="small" color="primary" variant="outlined" />
+                        <Chip
+                          label={blog.category.title}
+                          size="small"
+                          color="primary"
+                          variant="outlined"
+                        />
                       )}
                       <Typography variant="caption" color="text.secondary">
                         By {blog.user.username}
@@ -239,5 +264,5 @@ function DashboardContent() {
         )}
       </Container>
     </Box>
-  )
+  );
 }
